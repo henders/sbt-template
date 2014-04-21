@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#
+
+set -e
+
+camelCase ()   { sed -e 's/[-_]\([a-z]\)/\u\1/g' | sed -e 's/^./\u&/;'; }
+rewriteFile () { sed -i "s/psptemplate/$name/" "$1"; }
+
+dir="$(cd "$(dirname "$0")" && pwd)"
+name="$(echo "${1:-$(basename "$dir")}" | sed -e 's/[-_]\([a-z]\)/\u\1/g')"
+cd "$dir"
+
+find ./* -name '*.scala' -o -name '*.sbt' | while read f; do rewriteFile "$f"; done
+
+echo "Finished templatizing project $name in $dir ."
