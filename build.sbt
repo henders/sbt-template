@@ -11,3 +11,5 @@ initialCommands in console :=  "import psp._, psptemplate._",
                logBuffered :=  false,
   scalacOptions in Compile ++= Seq("-language:*")
 )
+
+bintraySettings
