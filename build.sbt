@@ -1,3 +1,7 @@
+def sbtFilesInBuild = baseDirectory in ThisBuild map (_ * "*.sbt" get)
+
+def scalaFilesInProject = baseDirectory in ThisBuild map (_ / "project" * "*.scala" get)
+
 lazy val root = project in file(".") settings (
                       name :=  "psptemplate",
               organization :=  "org.improving",
@@ -9,7 +13,8 @@ initialCommands in console :=  "import psp._, psptemplate._",
                   licenses :=  Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
                shellPrompt :=  (s => """%s#%s>""".format(name.value, (Project extract s).currentRef.project)),
                logBuffered :=  false,
-  scalacOptions in Compile ++= Seq("-language:*")
+              watchSources ++= sbtFilesInBuild.value ++ scalaFilesInProject.value,
+  scalacOptions in Compile ++= Seq("-language:_")
 )
 
 bintraySettings
