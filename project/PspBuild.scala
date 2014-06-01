@@ -22,6 +22,13 @@ object PspBuild extends sbt.Build {
         transitiveClassifiers :=  Nil,
                  watchSources ++= buildSourceFiles.value,
                 scalacOptions ++= Seq("-language:_"),
-                 javacOptions ++= Seq("-nowarn", "-XDignore.symbol.file")
+                 javacOptions ++= Seq("-nowarn", "-XDignore.symbol.file"),
+                     commands +=  findUpgrades
   )
+
+  def findUpgrades = Command.command("findUpgrades") { s =>
+    s.log info "Searching for updates for reflectively discovered dependencies:"
+    Deps.modules foreach (s.log info "  " + _)
+    "dependencyUpdates" :: (Project extract s).append(Seq(libraryDependencies ++= Deps.modules), s)
+  }
 }
