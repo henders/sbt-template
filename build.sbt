@@ -11,10 +11,11 @@ initialCommands in console :=  "import psp._, psptemplate._",
                fork in run :=  true,
  parallelExecution in Test :=  false,
                   licenses :=  Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
-               shellPrompt :=  (s => """%s#%s>""".format(name.value, (Project extract s).currentRef.project)),
+               shellPrompt :=  (s => "%s#%s> ".format(name.value, (Project extract s).currentRef.project)),
                logBuffered :=  false,
               watchSources ++= sbtFilesInBuild.value ++ scalaFilesInProject.value,
-  scalacOptions in Compile ++= Seq("-language:_")
+             scalacOptions ++= Seq("-language:_"),
+              javacOptions ++= Seq("-nowarn", "-XDignore.symbol.file")
 )
 
 bintraySettings
