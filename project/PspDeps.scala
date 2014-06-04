@@ -18,6 +18,7 @@ class JavaDeps {
   def javaSizeof     = "com.carrotsearch"               %   "java-sizeof"   %    "0.0.4"
   def javaxMail      = "javax.mail"                     %      "mail"       %    "1.4.7"
   def jline          = "jline"                          %      "jline"      %     "2.11"
+  def jodaTime       = "joda-time"                      %    "joda-time"    %     "2.3"
   def jmdns          = "javax.jmdns"                    %      "jmdns"      %    "3.4.1"
   def jmdnsAlt       = "com.github.rickyclarkson"       %      "jmdns"      % "3.4.2-r353-1"
   def jna            = "net.java.dev.jna"               %       "jna"       %    "4.1.0"
@@ -44,19 +45,23 @@ class Deps extends JavaDeps {
   def scalaXml      = "org.scala-lang.modules" %%        "scala-xml"         % "1.0.2"
 
   // Compile
-  def akka          = "com.typesafe.akka"        %% "akka-actor"  %     "2.3.3"
-  def improvingJio  = "org.improving"            %%     "jio"     % "2.0.0-SNAPSHOT"
-  def kiama         = "com.googlecode.kiama"     %%    "kiama"    %     "1.6.0"
-  def macroParadise = "org.scalamacros"          %%  "paradise"   %     "2.0.0"      % "plugin"
-  def parboiled     = "org.parboiled"            %%  "parboiled"  %   "2.0.0-RC1"
-  def quasiquotes   = "org.scalamacros"          %% "quasiquotes" %     "2.0.0"
-  def scalaChart    = "com.github.wookietreiber" %% "scala-chart" %     "0.4.2"
-  def scalariform   = "com.danieltrinh"          %% "scalariform" %     "0.1.5"
-  def scalazCore    = "org.scalaz"               %% "scalaz-core" %     "7.0.6"
-  def scct          = "com.sqality.scct"         %%    "scct"     %      "0.3"
-  def shapeless     = "com.chuusai"              %%  "shapeless"  %     "2.0.0"
-  def spire         = "org.spire-math"           %%    "spire"    %     "0.7.5"
-  def play          = "com.typesafe.play"        %%    "play"     %     "2.2.2"
+  def akka          = "com.typesafe.akka"        %%  "akka-actor"   %     "2.3.3"
+  def argonaut      = "io.argonaut"              %%   "argonaut"    %     "6.0.4"
+  def discipline    = "org.typelevel"            %%  "discipline"   %     "0.2.1"
+  def improvingJio  = "org.improving"            %%      "jio"      % "2.0.0-SNAPSHOT"
+  def kiama         = "com.googlecode.kiama"     %%     "kiama"     %     "1.6.0"
+  def macroParadise = "org.scalamacros"          %%   "paradise"    %     "2.0.0"      % "plugin"
+  def parboiled     = "org.parboiled"            %%   "parboiled"   %   "2.0.0-RC2"
+  def quasiquotes   = "org.scalamacros"          %%  "quasiquotes"  %     "2.0.0"
+  def scalaChart    = "com.github.wookietreiber" %%  "scala-chart"  %     "0.4.2"
+  def scalariform   = "com.danieltrinh"          %%  "scalariform"  %     "0.1.5"
+  def scalazCore    = "org.scalaz"               %%  "scalaz-core"  %     "7.0.6"
+  def scalazStream  = "org.scalaz.stream"        %% "scalaz-stream" %     "0.4.1"
+  def scct          = "com.sqality.scct"         %%     "scct"      %      "0.3"
+  def scodec        = "org.typelevel"            %%  "scodec-core"  %     "1.0.0"
+  def shapeless     = "com.chuusai"              %%   "shapeless"   %     "2.0.0"
+  def spire         = "org.spire-math"           %%     "spire"     %     "0.7.5"
+  def play          = "com.typesafe.play"        %%     "play"      %     "2.2.2"
 
   // Test
   def minty          = "org.improving"     %%    "mintiest"     % "1.0.0-SNAPSHOT" % "test"
@@ -71,10 +76,12 @@ class Deps extends JavaDeps {
 
   private def methods       = this.getClass.getMethods.toSeq
   private def moduleMethods = methods filter (m => m.getParameterTypes.isEmpty && m.getReturnType == classOf[ModuleID])
-  lazy val modules = moduleMethods sortBy (m => (m.getDeclaringClass.getName, m.getName)) map (m => (m invoke this).asInstanceOf[ModuleID])
 }
 
 object Deps extends Deps {
+  val modules: Seq[ModuleID] = moduleMethods sortBy (m => (m.getDeclaringClass.getName, m.getName)) map (m => (m invoke this).asInstanceOf[ModuleID])
+  val names: Seq[String]     = moduleMethods.map(_.getName).sorted
+
   private def moduleGroup(m: ModuleID) = (m.crossVersion == CrossVersion.Disabled, m.configurations == Some("test"))
   private def moduleSort(m: ModuleID)  = (m.name, m.organization)
   private def join(xs: Seq[String])    = xs filterNot (_ == "") mkString " % "
