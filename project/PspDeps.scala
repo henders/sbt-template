@@ -9,7 +9,7 @@ class JavaDeps {
   def asm            = "org.ow2.asm"                    %  "asm-debug-all"  %    "5.0.3"
   def caliper        = "com.google.caliper"             %     "caliper"     %  "1.0-beta-1"
   def commonsExec    = "org.apache.commons"             %  "commons-exec"   %     "1.2"
-  def commonsHttp    = "org.apache.httpcomponents"      %   "httpclient"    %    "4.3.3"
+  def commonsHttp    = "org.apache.httpcomponents"      %   "httpclient"    %    "4.3.4"
   def commonsIo      = "org.apache.commons"             %   "commons-io"    %    "1.3.2"
   def diffutils      = "com.googlecode.java-diff-utils" %    "diffutils"    %    "1.3.0"
   def gson           = "com.google.code.gson"           %      "gson"       %    "2.2.4"

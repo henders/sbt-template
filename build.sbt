@@ -1,4 +1,4 @@
-import psp._, psp.build._, PspBuild._
+import psp._, psp.build._
 
 lazy val psptemplate = project in file(".") settings (pspStandardSettings: _*)
 
