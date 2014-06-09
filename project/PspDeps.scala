@@ -67,7 +67,7 @@ class Deps extends JavaDeps {
   def minty          = "org.improving"     %%    "mintiest"     % "1.0.0-SNAPSHOT" % "test"
   def scalacheck     = "org.scalacheck"    %%   "scalacheck"    %     "1.11.4"     % "test"
   def scalameter     = "com.github.axel22" %%   "scalameter"    %     "0.5-M2"     % "test"
-  def scalatest      = "org.scalatest"     %%    "scalatest"    %     "2.1.7"      % "test"
+  def scalatest      = "org.scalatest"     %%    "scalatest"    %     "2.2.0"      % "test"
   def specs          = "org.specs2"        %%     "specs2"      %     "2.3.12"     % "test"
   def utest          = "com.lihaoyi"       %%      "utest"      %     "0.1.5"      % "test"
 
