@@ -1,8 +1,8 @@
 package psp
-package psptemplate
+package scratch
 
 object Main {
   def main(args: Array[String]): Unit = {
-    println("Template project.")
+    println("Scratch project.")
   }
 }
