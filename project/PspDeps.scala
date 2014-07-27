@@ -41,7 +41,7 @@ class Deps extends JavaDeps {
   // scala language dependencies
   def scalaCompiler = scalaVersion map ("org.scala-lang" % "scala-compiler" % _)
   def scalaReflect  = scalaVersion map ("org.scala-lang" % "scala-reflect"  % _)
-  def scalaParsers  = "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.1"
+  def scalaParsers  = "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.2"
   def scalaXml      = "org.scala-lang.modules" %%        "scala-xml"         % "1.0.2"
 
   // Compile
@@ -68,8 +68,8 @@ class Deps extends JavaDeps {
   def scalacheck     = "org.scalacheck"    %%   "scalacheck"    %     "1.11.4"     % "test"
   def scalameter     = "com.github.axel22" %%   "scalameter"    %     "0.5-M2"     % "test"
   def scalatest      = "org.scalatest"     %%    "scalatest"    %     "2.2.0"      % "test"
-  def specs          = "org.specs2"        %%     "specs2"      %     "2.3.12"     % "test"
-  def utest          = "com.lihaoyi"       %%      "utest"      %     "0.1.7"      % "test"
+  def specs          = "org.specs2"        %%     "specs2"      %     "2.3.13"     % "test"
+  def utest          = "com.lihaoyi"       %%      "utest"      %     "0.1.8"      % "test"
 
   // Homeless
   def thyme = "ichi.bench" % "thyme" % "0.1.1" from "http://plastic-idolatry.com/jars/thyme-0.1.1.jar"

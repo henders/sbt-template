@@ -12,7 +12,7 @@ object PspBuild extends sbt.Build {
   def pspStandardSettings: SettingSeq = initialCommandSettings ++ Seq(
                  organization :=  "org.improving",
                       version :=  "1.0.0-SNAPSHOT",
-                 scalaVersion :=  "2.11.1",
+                 scalaVersion :=  "2.11.2",
            crossScalaVersions :=  List("2.10.4", scalaVersion.value),
                   fork in run :=  true,
     parallelExecution in Test :=  false,
