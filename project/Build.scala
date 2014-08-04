@@ -1,5 +1,5 @@
 package psp
-package scratchy
+package scratch
 
 import sbt._, Keys._
 
@@ -15,7 +15,7 @@ object Build extends sbt.Build {
                         name :=  "psp-scratch",
                 organization :=  "org.improving",
                      version :=  "0.0.1-SNAPSHOT",
-                scalaVersion :=  "2.11.1",
+                scalaVersion :=  "2.11.2",
                  shellPrompt :=  (s => "%s#%s> ".format(name.value, (Project extract s).currentRef.project)),
                  logBuffered :=  false,
        transitiveClassifiers :=  Nil,
