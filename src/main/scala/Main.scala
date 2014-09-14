@@ -1,8 +1,13 @@
 package psp
-package psptemplate
 
-object Main {
-  def main(args: Array[String]): Unit = {
-    println("Template project.")
+package xyz {
+  object Main {
+    def main(args: Array[String]): Unit = {
+      println("Scratch project.")
+    }
   }
+}
+
+package object xyz extends psp.std.api.PackageLevel {
+
 }
