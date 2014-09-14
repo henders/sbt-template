@@ -1,1 +1,5 @@
 project/local.properties
+target
+lib_managed
+src_managed
+.history
