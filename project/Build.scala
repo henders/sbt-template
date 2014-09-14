@@ -1,28 +1,28 @@
-package psp
-package scratch
+package building
+package pspxyz
 
-import sbt._, Keys._
-import scala.sys.process.Process
+import sbt._, Keys._, psp.libsbt._
 
 object Build extends sbt.Build {
-  def uniqueVersion(v: String) = "%s-%s".format(v, new java.text.SimpleDateFormat("MMdd-HHmm") format new java.util.Date)
+  def prompt(name: String)(state: State) = "%s#%s>".format(name, state.currentRef)
+  def imports = "\nimport java.nio.file._, psp.std.api._"
 
-  lazy val root = project in file(".") settings (
-                        name :=  "psp-xxx",
-                organization :=  "org.improving",
-                     version :=  uniqueVersion("0.1.0"),
-                scalaVersion :=  "2.11.2",
-          crossScalaVersions :=  Seq("2.10.4", "2.11.2"),
-                 shellPrompt :=  (s => "%s#%s> ".format(name.value, (Project extract s).currentRef.project)),
-                 logBuffered :=  false,
-                watchSources ++= (baseDirectory.value / "project" * "*.scala").get ++ (baseDirectory.value * "*.sbt").get,
-               scalacOptions ++= Seq("-language:_"),
-                javacOptions ++= Seq("-nowarn", "-XDignore.symbol.file"),
-  initialCommands in console +=  "import java.nio.file._",
-                   resolvers +=  "paulp/maven" at "https://dl.bintray.com/paulp/maven",
-         libraryDependencies +=  "org.improving" %% "psp-api" % "0.4.3",
-                    licenses :=  Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
-        cancelable in Global :=  true,
-                        test :=  (run in Test toTask "").value
+  lazy val root = project in file(".") also standardSettings settings (
+                  name :=  "psp-xyz",
+           description :=  "psp scratch project",
+          organization :=  pspOrg,
+              licenses :=  pspLicenses,
+               version :=  publishVersion,
+          scalaVersion :=  scalaVersionLatest,
+    crossScalaVersions :=  scalaVersionsCross,
+           shellPrompt :=  prompt(name.value),
+           logBuffered :=  false,
+          watchSources ++= (baseDirectory.value / "project" * "*.scala").get ++ (baseDirectory.value * "*.sbt").get,
+          key.initRepl +=  imports,
+      key.initMetaRepl +=  imports,
+             resolvers +=  "paulp/maven" at "https://dl.bintray.com/paulp/maven",
+   libraryDependencies +=  "org.improving" %% "psp-api" % "0.4.3",
+  cancelable in Global :=  true,
+                  test :=  (run in Test toTask "").value
   )
 }
