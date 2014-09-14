@@ -1,8 +1,6 @@
 package psp
 
-import scala.collection.convert._
-
-package scratch {
+package xxx {
   object Main {
     def main(args: Array[String]): Unit = {
       println("Scratch project.")
@@ -10,6 +8,6 @@ package scratch {
   }
 }
 
-package object scratch extends DecorateAsJava with DecorateAsScala {
+package object xxx extends psp.std.api.PackageLevel {
 
 }
