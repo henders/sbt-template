@@ -1,6 +1,6 @@
-package psp
+package xyzzy
 
-package xyz {
+package plugh {
   object Main {
     def main(args: Array[String]): Unit = {
       println("Scratch project.")
@@ -8,6 +8,6 @@ package xyz {
   }
 }
 
-package object xyz extends psp.std.api.PackageLevel {
+package object plugh extends psp.std.api.PackageLevel {
 
 }
