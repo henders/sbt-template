@@ -21,7 +21,7 @@ object Build extends sbt.Build {
           key.initRepl +=  imports + ", xyzzy.plugh._",
       key.initMetaRepl +=  imports,
              resolvers +=  "paulp/maven" at "https://dl.bintray.com/paulp/maven",
-   libraryDependencies +=  "org.improving" %% "psp-api" % "0.4.3",
+   libraryDependencies +=  "org.improving" %% "psp-api" % "0.4.4",
   cancelable in Global :=  true,
                   test :=  (run in Test toTask "").value
   )
