@@ -1,4 +1,4 @@
-def libsbtModuleId = "org.improving" % "psp-libsbt" % sys.props.getOrElse("libsbt.version", "0.4.4")
+def libsbtModuleId = "org.improving" % "psp-libsbt" % sys.props.getOrElse("libsbt.version", "0.5.0")
 
 def libsbtSource = sys.props get "libsbt.path"
 

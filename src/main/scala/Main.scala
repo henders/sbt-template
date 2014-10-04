@@ -1,5 +1,7 @@
 package xyzzy
 
+import psp.std._
+
 package plugh {
   object Main {
     def main(args: Array[String]): Unit = {
@@ -8,6 +10,6 @@ package plugh {
   }
 }
 
-package object plugh extends psp.std.api.PackageLevel {
+package object plugh {
 
 }

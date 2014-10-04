@@ -8,21 +8,19 @@ object Build extends sbt.Build {
   def imports = "\nimport java.nio.file._, psp.std.api._"
 
   lazy val root = project in file(".") also standardSettings settings (
-                  name :=  "plugh",
-           description :=  "xyzzy template project",
-          organization :=  "xyzzy",
-              licenses :=  pspLicenses,
-               version :=  publishVersion,
-          scalaVersion :=  scalaVersionLatest,
-    crossScalaVersions :=  scalaVersionsCross,
-           shellPrompt :=  prompt(name.value),
-           logBuffered :=  false,
-          watchSources ++= (baseDirectory.value / "project" * "*.scala").get ++ (baseDirectory.value * "*.sbt").get,
-          key.initRepl +=  imports + ", xyzzy.plugh._",
-      key.initMetaRepl +=  imports,
-             resolvers +=  "paulp/maven" at "https://dl.bintray.com/paulp/maven",
-   libraryDependencies +=  "org.improving" %% "psp-api" % "0.4.4",
-  cancelable in Global :=  true,
-                  test :=  (run in Test toTask "").value
+                   name :=  "plugh",
+            description :=  "xyzzy template project",
+           organization :=  "xyzzy",
+               licenses :=  pspLicenses,
+                version :=  sbtBuildProps.buildVersion,
+           scalaVersion :=  scalaVersionLatest,
+     crossScalaVersions :=  scalaVersionsCross,
+            shellPrompt :=  prompt(name.value),
+            logBuffered :=  false,
+           watchSources ++= (baseDirectory.value / "project" * "*.scala").get ++ (baseDirectory.value * "*.sbt").get,
+           key.initRepl +=  imports + ", xyzzy.plugh._",
+       key.initMetaRepl +=  imports,
+    libraryDependencies +=  "org.improving" %% "psp-std" % "0.5.0",
+                   test :=  (run in Test toTask "").value
   )
 }
