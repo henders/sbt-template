@@ -5,7 +5,7 @@ import sbt._, Keys._, psp.libsbt._
 
 object Build extends sbt.Build {
   def prompt(name: String)(state: State) = "%s#%s>".format(name, state.currentRef)
-  def imports = "\nimport java.nio.file._, psp.std.api._"
+  def imports = "\nimport psp.std._, api._"
 
   lazy val root = project in file(".") also standardSettings settings (
                    name :=  "plugh",
