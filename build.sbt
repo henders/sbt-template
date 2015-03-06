@@ -2,14 +2,13 @@
                 description :=  ""
                organization :=  "org.improving"
                    licenses :=  Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
-                    version :=  "0.0.1-M1"
-               scalaVersion :=  "2.11.5"
+               scalaVersion :=  "2.11.6"
                 shellPrompt :=  prompt(name.value)
                 logBuffered :=  false
                watchSources ++= sourcesIn(baseDirectory.value / "project")
  initialCommands in console <+= repl
                        test <<= run in Test toTask ""
-                  maxErrors :=  5
+                  maxErrors :=  10
            triggeredMessage :=  Watched.clearWhenTriggered
 /**
         libraryDependencies ++= Seq(
