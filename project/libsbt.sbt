@@ -1,4 +1,4 @@
-def libsbtModuleId = "org.improving" % "psp-libsbt" % sys.props.getOrElse("libsbt.version", "0.5.5")
+def libsbtModuleId = "org.improving" % "psp-libsbt" % sys.props.getOrElse("libsbt.version", "0.5.6")
 def libsbtSource   = sys.props get "libsbt.path"
 def libsbtPlugin   = libraryDependencies += Defaults.sbtPluginExtra(libsbtModuleId, "0.13", "2.10")
 
