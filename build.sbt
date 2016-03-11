@@ -1,8 +1,8 @@
                        name :=  "xyzzy"
-                description :=  ""
+                description :=  "xyzzy description"
                organization :=  "org.improving"
                    licenses :=  Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
-               scalaVersion :=  "2.11.7"
+               scalaVersion :=  "2.11.8"
                 shellPrompt :=  prompt(name.value)
                 logBuffered :=  false
                watchSources ++= sourcesIn(baseDirectory.value / "project")
