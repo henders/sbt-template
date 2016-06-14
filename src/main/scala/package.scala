@@ -1,5 +1,5 @@
 package psp
 
-package object xyzzy {
+package object template {
 
 }
