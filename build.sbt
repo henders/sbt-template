@@ -4,6 +4,8 @@ import psp.Sbtx._
          description := "description"
         organization := "org.improving"
         scalaVersion := "2.11.8"
+   scalaOrganization := "org.scala-lang"
+   // scalaOrganization := "org.typelevel"
   crossScalaVersions := Seq(scalaVersion.value, "2.12.0-M5")
             licenses := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
            maxErrors := 15
@@ -18,14 +20,14 @@ inTest(
          logBuffered := false,
           traceLevel := 30,
          testOptions += Tests.Argument(TestFrameworks.ScalaCheck, "-verbosity", "1"),
-         testOptions += Tests.Argument(TestFrameworks.JUnit, envOr("JUNIT", "-a -v -s"): _*)
+         testOptions += Tests.Argument(TestFrameworks.JUnit, wordSeq("-a -v -s"): _*)
 )
 
 inBoth(c =>
   Seq(
-                 scalacOptions in c  :=  envOr("SCALAC", "-language:_ -Yno-adapted-args -Ywarn-unused -Ywarn-unused-import"),
-                  javacOptions in c  :=  envOr("JAVAC", "-nowarn -XDignore.symbol.file"),
-      scalacOptions in console in c  :=  envOr("REPLARGS", "-language:_ -Yno-adapted-args"),
+                 scalacOptions in c  :=  wordSeq("-language:_ -Yno-adapted-args -Ywarn-unused -Ywarn-unused-import"),
+                  javacOptions in c  :=  wordSeq("-nowarn -XDignore.symbol.file"),
+      scalacOptions in console in c  :=  wordSeq("-language:_ -Yno-adapted-args"),
     initialCommands in console in c  +=  "import java.nio.file._, psp._",
                         target in c <<=  crossJvmTarget(c),
     unmanagedSourceDirectories in c <++= crossScalaSource(c)
