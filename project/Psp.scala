@@ -3,20 +3,21 @@ package psp
 import sbt._, Keys._
 
 object Sbtx {
+  type ->[+A, +B]     = (A, B)
   type SettingOf[A]   = Def.Initialize[A]
   type TaskOf[A]      = Def.Initialize[Task[A]]
   type InputTaskOf[A] = Def.Initialize[InputTask[A]]
-  type Sets           = Seq[Setting[_]]
+  type Stg            = Setting[_]
+  type Stgs           = Seq[Stg]
   type Strs           = Seq[String]
 
-  def wordSeq(s: String): Strs                = s split "\\s+" filterNot (_ == "") toVector
-  def envOr(key: String, value: String): Strs = wordSeq(sys.env.getOrElse(key, value))
+  def wordSeq(s: String): Strs                         = s split "\\s+" filterNot (_ == "") toVector
+  def envOr(key: String, value: String): Strs          = wordSeq(sys.env.getOrElse(key, value))
+  def inAll(scopes: Scope*)(fs: (Scope => Stg)*): Stgs = for (scope <- scopes ; f <- fs) yield f(scope)
+  def buildBase                                        = baseDirectory in ThisBuild
+  def javaSpecVersion: String                          = sys.props("java.specification.version")
 
-  def inCompile(ss: Setting[_]*)             = inConfig(Compile)(ss.toSeq)
-  def inTest(ss: Setting[_]*)                = inConfig(Test)(ss.toSeq)
-  def inBoth(f: Configuration => Sets): Sets = List(Test, Compile) flatMap f
-  def buildBase                              = baseDirectory in ThisBuild
-  def javaSpecVersion: String                = sys.props("java.specification.version")
+  implicit def liftConfigTaskPair[A](pair: Configuration -> TaskKey[A]): Scope = Scope.ThisScope in (pair._1, pair._2.key)
 
   /** Watch out Jonesy! It's the ol' double-cross!
    *  Why, you...
@@ -67,7 +68,7 @@ object Sbtx {
       packagedArtifacts := Map()
     )
     def also(m: ModuleID, ms: ModuleID*): Project     = also(libraryDependencies ++= m +: ms)
-    def also(s: Setting[_], ss: Setting[_]*): Project = also(s +: ss.toSeq)
-    def also(ss: Sets): Project            = p settings (ss: _*)
+    def also(s: Stg, ss: Stg*): Project = also(s +: ss.toSeq)
+    def also(ss: Stgs): Project            = p settings (ss: _*)
   }
 }
