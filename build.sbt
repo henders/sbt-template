@@ -10,11 +10,11 @@ import psp.Sbtx._
               licenses := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
    libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % Test
 
-           parallelExecution in Global  :=  false
-                     target in Compile <<=  crossJvmTarget(Compile)
-                        target in Test <<=  crossJvmTarget(Test)
- unmanagedSourceDirectories in Compile <++= crossScalaSource(Compile)
-    unmanagedSourceDirectories in Test <++= crossScalaSource(Test)
+           parallelExecution in Global :=  false
+                     target in Compile :=  crossJvmTarget(Compile).value
+                        target in Test :=  crossJvmTarget(Test).value
+ unmanagedSourceDirectories in Compile ++= crossScalaSource(Compile).value
+    unmanagedSourceDirectories in Test ++= crossScalaSource(Test).value
 
 inAll(Compile -> compile, Test -> compile)(
   scalacOptions in _ := wordSeq("-language:_ -Yno-adapted-args -Ywarn-unused -Ywarn-unused-import"),
