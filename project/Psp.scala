@@ -16,6 +16,7 @@ object Sbtx {
   def inAll(scopes: Scope*)(fs: (Scope => Stg)*): Stgs = for (scope <- scopes ; f <- fs) yield f(scope)
   def buildBase                                        = baseDirectory in ThisBuild
   def javaSpecVersion: String                          = sys.props("java.specification.version")
+  def typelevelArgs                                    = wordSeq("-Ypartial-unification -Yliteral-types")
 
   implicit def liftConfigTaskPair[A](pair: Configuration -> TaskKey[A]): Scope = Scope.ThisScope in (pair._1, pair._2.key)
 
@@ -60,6 +61,8 @@ object Sbtx {
 
   implicit class ProjectOps(val p: Project) {
     def root: Project = noArtifacts in file(".")
+    def typelevel     = also(scalaOrganization := "org.typelevel", scalacOptions ++= typelevelArgs)
+
     def noArtifacts: Project = also(
                 publish := (()),
            publishLocal := (()),
@@ -67,8 +70,8 @@ object Sbtx {
              packageBin := file(""),
       packagedArtifacts := Map()
     )
-    def also(m: ModuleID, ms: ModuleID*): Project     = also(libraryDependencies ++= m +: ms)
-    def also(s: Stg, ss: Stg*): Project = also(s +: ss.toSeq)
-    def also(ss: Stgs): Project            = p settings (ss: _*)
+    def also(m: ModuleID, ms: ModuleID*): Project = also(libraryDependencies ++= m +: ms)
+    def also(s: Stg, ss: Stg*): Project           = also(s +: ss.toSeq)
+    def also(ss: Stgs): Project                   = p settings (ss: _*)
   }
 }

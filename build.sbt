@@ -6,7 +6,7 @@ import psp.Sbtx._
           scalaVersion := "2.11.8"
      scalaOrganization := "org.scala-lang"
      // scalaOrganization := "org.typelevel"
-    crossScalaVersions := Seq(scalaVersion.value, "2.12.0-M5")
+    crossScalaVersions := Seq(scalaVersion.value, "2.12.0")
               licenses := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
    libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % Test
 
