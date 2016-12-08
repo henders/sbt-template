@@ -2,7 +2,16 @@ package psp
 
 import sbt._, Keys._
 
+object Deps {
+  def scalaz        = "org.scalaz"     %% "scalaz-core"     % "7.2.8"
+  def junit         = "com.novocode"   %  "junit-interface" % "0.11"
+  def kindProjector = "org.spire-math" %  "kind-projector"  % "0.9.3" cross CrossVersion.binary
+}
+
 object Sbtx {
+  import Project.{ inThisBuild, inConfig, inTask, inScope }
+  import Def.{ MapScoped, ScopedKey, mapScope }
+
   type ->[+A, +B]     = (A, B)
   type SettingOf[A]   = Def.Initialize[A]
   type TaskOf[A]      = Def.Initialize[Task[A]]
@@ -11,14 +20,30 @@ object Sbtx {
   type Stgs           = Seq[Stg]
   type Strs           = Seq[String]
 
-  def wordSeq(s: String): Strs                         = s split "\\s+" filterNot (_ == "") toVector
-  def envOr(key: String, value: String): Strs          = wordSeq(sys.env.getOrElse(key, value))
-  def inAll(scopes: Scope*)(fs: (Scope => Stg)*): Stgs = for (scope <- scopes ; f <- fs) yield f(scope)
-  def buildBase                                        = baseDirectory in ThisBuild
-  def javaSpecVersion: String                          = sys.props("java.specification.version")
-  def typelevelArgs                                    = wordSeq("-Ypartial-unification -Yliteral-types")
+  def wordSeq(s: String): Strs                = s split "\\s+" filterNot (_ == "") toVector
+  def envOr(key: String, value: String): Strs = wordSeq(sys.env.getOrElse(key, value))
+  def buildBase                               = baseDirectory in ThisBuild
+  def javaSpecVersion: String                 = sys.props("java.specification.version")
+  def typelevelArgs                           = wordSeq("-Ypartial-unification -Yliteral-types")
 
-  implicit def liftConfigTaskPair[A](pair: Configuration -> TaskKey[A]): Scope = Scope.ThisScope in (pair._1, pair._2.key)
+  def withPairs(pairs: (Configuration, TaskKey[_])*)(ss: Stg*): Stgs =
+    for ((conf, key) <- pairs; s <- ss) yield s mapKey mapScope(_ in (conf, key.key))
+
+  def withScopes(fs: MapScoped*)(ss: Stg*): Stgs =
+    for (f <- fs; s <- ss) yield s mapKey f
+
+  def inScopes(scopes: Scope*)(ss: Stg*): Stgs =
+    for (scope <- scopes ; s <- ss) yield s mapKey mapScope(_ => scope)
+
+  def inTasks(keys: TaskKey[_]*)(ss: Stg*): Stgs =
+    for (key <- keys ; s <- ss) yield s mapKey mapScope(_ in key.key)
+
+  def inTest(ss: Stg*): Stgs         = inConfig(Test)(ss)
+  def inCompile(ss: Stg*): Stgs      = inConfig(Compile)(ss)
+
+  def inCompileTasks(ss: Stg*): Stgs = withPairs(Compile -> compile, Test -> compile)(ss: _*)
+  def inConsoleTasks(ss: Stg*): Stgs = withPairs(Compile -> console, Test -> console)(ss: _*)
+  def inTestTask(ss: Stg*): Stgs     = withPairs(Test -> test)(ss: _*)
 
   /** Watch out Jonesy! It's the ol' double-cross!
    *  Why, you...
@@ -61,7 +86,19 @@ object Sbtx {
 
   implicit class ProjectOps(val p: Project) {
     def root: Project = noArtifacts in file(".")
-    def typelevel     = also(scalaOrganization := "org.typelevel", scalacOptions ++= typelevelArgs)
+    def typelevel     = also(scalaOrganization := "org.typelevel", scalaVersion := "2.12.0", scalacOptions ++= typelevelArgs)
+    def scalalang     = also(scalaOrganization := "org.scala-lang", scalaVersion := "2.12.1")
+
+    def crossDirs: Project = ( this
+      also inCompile(
+                            target :=  crossJvmTarget(Compile).value,
+        unmanagedSourceDirectories ++= crossScalaSource(Compile).value
+      )
+      also inTest(
+                            target :=  crossJvmTarget(Test).value,
+        unmanagedSourceDirectories ++= crossScalaSource(Test).value
+      )
+    )
 
     def noArtifacts: Project = also(
                 publish := (()),
@@ -70,8 +107,12 @@ object Sbtx {
              packageBin := file(""),
       packagedArtifacts := Map()
     )
-    def also(m: ModuleID, ms: ModuleID*): Project = also(libraryDependencies ++= m +: ms)
     def also(s: Stg, ss: Stg*): Project           = also(s +: ss.toSeq)
     def also(ss: Stgs): Project                   = p settings (ss: _*)
+
+    def depsIn(c: Configuration)(ms: Seq[ModuleID]): Project = also(libraryDependencies ++= ms.map(_ % c))
+    def compileDeps(m: ModuleID, ms: ModuleID*): Project     = depsIn(Compile)(m +: ms)
+    def testDeps(m: ModuleID, ms: ModuleID*): Project        = depsIn(Test)(m +: ms)
+    def pluginDeps(m: ModuleID, ms: ModuleID*): Project      = also(m +: ms flatMap addCompilerPlugin)
   }
 }
