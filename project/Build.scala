@@ -3,9 +3,15 @@ package psp
 import sbt._, Keys._
 
 object Deps {
-  def scalaz        = "org.scalaz"     %% "scalaz-core"     % "7.2.8"
-  def junit         = "com.novocode"   %  "junit-interface" % "0.11"
-  def kindProjector = "org.spire-math" %  "kind-projector"  % "0.9.3" cross CrossVersion.binary
+  def cats           = "org.typelevel" %% "cats-core"       % "0.9.0"
+  def scalaz         = "org.scalaz"    %% "scalaz-core"     % "7.2.8"
+  def matryoshka     = "com.slamdata"  %% "matryoshka-core" % "0.16.10"
+  def typesafeConfig = "com.typesafe"  %  "config"          % "1.3.1"
+
+  def scalacheck     = "org.scalacheck"  %% "scalacheck"      % "1.13.4"
+  def junit          = "com.novocode"    %  "junit-interface" % "0.11"
+  def macroParadise  = "org.scalamacros" %  "paradise"        % "2.1.0" cross CrossVersion.full
+  def kindProjector  = "org.spire-math"  %  "kind-projector"  % "0.9.3" cross CrossVersion.binary
 }
 
 object Sbtx {
@@ -86,9 +92,32 @@ object Sbtx {
 
   implicit class ProjectOps(val p: Project) {
     def root: Project = noArtifacts in file(".")
-    def typelevel     = also(scalaOrganization := "org.typelevel", scalaVersion := "2.12.0", scalacOptions ++= typelevelArgs)
-    def scalalang     = also(scalaOrganization := "org.scala-lang", scalaVersion := "2.12.1")
+    def typelevel     = also(scalaOrganization := "org.typelevel", scalacOptions ++= typelevelArgs)
+    def scalalang     = also(scalaOrganization := "org.scala-lang")
 
+    def useJunit = (
+      testDeps(Deps.junit)
+      also (testOptions in Test += Tests.Argument(TestFrameworks.JUnit, wordSeq("-a -v -s"): _*))
+    )
+    def useScalacheck = (
+      testDeps(Deps.scalacheck)
+      also (testOptions in Test += Tests.Argument(TestFrameworks.ScalaCheck, "-verbosity", "1"))
+    )
+
+    def standardOptions = ( p
+      pluginDeps Deps.kindProjector
+      also inCompileTasks(
+        scalacOptions ++= wordSeq("-language:_ -Yno-adapted-args -Ywarn-unused -Ywarn-unused-import"),
+         javacOptions ++= wordSeq("-nowarn -XDignore.symbol.file")
+      )
+      also inConsoleTasks(
+          scalacOptions ++= wordSeq("-language:_ -Yno-adapted-args -Ywarn-unused"),
+        initialCommands +=  "import java.nio.file._, psp._"
+      )
+      also (
+        licenses := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
+      )
+    )
     def crossDirs: Project = ( this
       also inCompile(
                             target :=  crossJvmTarget(Compile).value,

@@ -1,5 +1,4 @@
-package psp
-package tests
+package psp.tests
 
 class PspTests {
   @Test
