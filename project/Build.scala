@@ -3,15 +3,21 @@ package psp
 import sbt._, Keys._
 
 object Deps {
-  def cats           = "org.typelevel" %% "cats-core"       % "0.9.0"
-  def scalaz         = "org.scalaz"    %% "scalaz-core"     % "7.2.8"
-  def matryoshka     = "com.slamdata"  %% "matryoshka-core" % "0.16.10"
-  def typesafeConfig = "com.typesafe"  %  "config"          % "1.3.1"
+  def cats       = "org.typelevel"  %% "cats-core"       % "0.9.0"
+  def config     = "com.typesafe"   %  "config"          % "1.3.1"
+  def jawn       = "org.spire-math" %% "jawn-parser"     % "0.10.4"
+  def matryoshka = "com.slamdata"   %% "matryoshka-core" % "0.16.10"
+  def scalaz     = "org.scalaz"     %% "scalaz-core"     % "7.2.9"
+  def shapeless  = "com.chuusai"    %% "shapeless"       % "2.3.2"
 
-  def scalacheck     = "org.scalacheck"  %% "scalacheck"      % "1.13.4"
-  def junit          = "com.novocode"    %  "junit-interface" % "0.11"
-  def macroParadise  = "org.scalamacros" %  "paradise"        % "2.1.0" cross CrossVersion.full
-  def kindProjector  = "org.spire-math"  %  "kind-projector"  % "0.9.3" cross CrossVersion.binary
+  def junit      = "com.novocode"          %  "junit-interface" % "0.11"
+  def scalacheck = "org.scalacheck"        %% "scalacheck"      % "1.13.4"
+  def scalaprops = "com.github.scalaprops" %% "scalaprops"      % "0.4.1"
+}
+
+object Plugins {
+  def macroParadise = "org.scalamacros" % "paradise"       % "2.1.0" cross CrossVersion.full
+  def kindProjector = "org.spire-math"  % "kind-projector" % "0.9.3" cross CrossVersion.binary
 }
 
 object Sbtx {
@@ -104,18 +110,16 @@ object Sbtx {
       also (testOptions in Test += Tests.Argument(TestFrameworks.ScalaCheck, "-verbosity", "1"))
     )
 
-    def standardOptions = ( p
-      pluginDeps Deps.kindProjector
+    def standardSetup = (
+      useJunit
+      pluginDeps Plugins.kindProjector
       also inCompileTasks(
         scalacOptions ++= wordSeq("-language:_ -Yno-adapted-args -Ywarn-unused -Ywarn-unused-import"),
          javacOptions ++= wordSeq("-nowarn -XDignore.symbol.file")
       )
       also inConsoleTasks(
           scalacOptions ++= wordSeq("-language:_ -Yno-adapted-args -Ywarn-unused"),
-        initialCommands +=  "import java.nio.file._, psp._"
-      )
-      also (
-        licenses := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
+        initialCommands += "\nimport java.nio.file._, psp._"
       )
     )
     def crossDirs: Project = ( this
@@ -140,7 +144,7 @@ object Sbtx {
     def also(ss: Stgs): Project                   = p settings (ss: _*)
 
     def depsIn(c: Configuration)(ms: Seq[ModuleID]): Project = also(libraryDependencies ++= ms.map(_ % c))
-    def compileDeps(m: ModuleID, ms: ModuleID*): Project     = depsIn(Compile)(m +: ms)
+    def deps(m: ModuleID, ms: ModuleID*): Project            = depsIn(Compile)(m +: ms)
     def testDeps(m: ModuleID, ms: ModuleID*): Project        = depsIn(Test)(m +: ms)
     def pluginDeps(m: ModuleID, ms: ModuleID*): Project      = also(m +: ms flatMap addCompilerPlugin)
   }
