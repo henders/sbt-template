@@ -6,18 +6,18 @@ object Deps {
   def cats       = "org.typelevel"  %% "cats-core"       % "0.9.0"
   def config     = "com.typesafe"   %  "config"          % "1.3.1"
   def jawn       = "org.spire-math" %% "jawn-parser"     % "0.10.4"
-  def matryoshka = "com.slamdata"   %% "matryoshka-core" % "0.18.3"
-  def scalaz     = "org.scalaz"     %% "scalaz-core"     % "7.2.10"
+  def matryoshka = "com.slamdata"   %% "matryoshka-core" % "0.20.2"
+  def scalaz     = "org.scalaz"     %% "scalaz-core"     % "7.2.14"
   def shapeless  = "com.chuusai"    %% "shapeless"       % "2.3.2"
 
   def junit      = "com.novocode"          %  "junit-interface" % "0.11"   % Test
   def scalacheck = "org.scalacheck"        %% "scalacheck"      % "1.13.5" % Test
-  def scalaprops = "com.github.scalaprops" %% "scalaprops"      % "0.4.1"  % Test
+  def scalaprops = "com.github.scalaprops" %% "scalaprops"      % "0.5.0"  % Test
 }
 
 object ScalacPlugins {
-  def macroParadise = "org.scalamacros" % "paradise"       % "2.1.0" cross CrossVersion.full
-  def kindProjector = "org.spire-math"  % "kind-projector" % "0.9.3" cross CrossVersion.binary
+  def macroParadise = "org.scalamacros" % "paradise"       % "2.1.1" cross CrossVersion.full
+  def kindProjector = "org.spire-math"  % "kind-projector" % "0.9.4" cross CrossVersion.binary
 }
 
 object Sbtx {
