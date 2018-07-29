@@ -4,22 +4,22 @@ import sbt._, Keys._, Deps._
 
 object Deps {
   object CompileD {
-    def cats       = "org.typelevel"         %% "cats-core"       % "1.0.0"
-    def config     = "com.typesafe"          %  "config"          % "1.3.2"
-    def jawn       = "org.spire-math"        %% "jawn-parser"     % "0.11.0"
+    def cats       = "org.typelevel"         %% "cats-core"       % "1.2.0"
+    def config     = "com.typesafe"          %  "config"          % "1.3.3"
+    def jawn       = "org.spire-math"        %% "jawn-parser"     % "0.13.0"
     def matryoshka = "com.slamdata"          %% "matryoshka-core" % "0.21.3"
-    def pureConfig = "com.github.pureconfig" %% "pureconfig"      % "0.8.0"
-    def scalaz     = "org.scalaz"            %% "scalaz-core"     % "7.2.18"
-    def shapeless  = "com.chuusai"           %% "shapeless"       % "2.3.2"
+    def pureConfig = "com.github.pureconfig" %% "pureconfig"      % "0.9.1"
+    def scalaz     = "org.scalaz"            %% "scalaz-core"     % "7.2.25"
+    def shapeless  = "com.chuusai"           %% "shapeless"       % "2.3.3"
   }
   object TestD {
     def junit      = "com.novocode"          %  "junit-interface" % "0.11"   % Test
-    def scalacheck = "org.scalacheck"        %% "scalacheck"      % "1.13.5" % Test
-    def scalaprops = "com.github.scalaprops" %% "scalaprops"      % "0.5.2"  % Test
+    def scalacheck = "org.scalacheck"        %% "scalacheck"      % "1.14.0" % Test
+    def scalaprops = "com.github.scalaprops" %% "scalaprops"      % "0.5.5"  % Test
   }
   object PluginD {
     def macroParadise = "org.scalamacros" % "paradise"       % "2.1.1" cross CrossVersion.full
-    def kindProjector = "org.spire-math"  % "kind-projector" % "0.9.5" cross CrossVersion.binary
+    def kindProjector = "org.spire-math"  % "kind-projector" % "0.9.7" cross CrossVersion.binary
   }
 }
 
